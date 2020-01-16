@@ -9,6 +9,7 @@ var port = 3000;
 var server = http.createServer(app).listen(port);
 
 app.use(express.static(__dirname + "/public/splashscreen"));
+app.use(express.static(__dirname + "/public/main"));
 
 const wss = new websocket.Server({server});
 
@@ -18,6 +19,11 @@ app.get("/", function(req, res)
 //	var q = url.parse(req.url, true).query;
 //	name = q.name;
 //	console.log(name);
+});
+
+app.get("/play", function(req, res)
+{
+	res.sendFile(__dirname + "/public/main/main.html");
 });
 
 app.get("/*", function(req, res)
