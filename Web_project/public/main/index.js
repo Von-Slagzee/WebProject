@@ -6,7 +6,7 @@ function setup()
 
 var x = 0;
 var y = 0;
-let test = new blob(500,145,50);
+let test = new blob(window.innerWidth/2,145,36);
 function draw()
 {
 	background("rbg(51,51,51)");
@@ -30,9 +30,9 @@ function draw()
 
 function onResize()
 {
-	//size(window.innerWidth, window.innerHeight);
-	//x = 0;
-	//y = 0;
+	size(window.innerWidth, window.innerHeight);
+	x = 0;
+	y = 0;
 }
 
 function blob(x,y,size)
@@ -50,7 +50,7 @@ blob.prototype.show = function()
 	ctx.fillStyle = "rgb(255,0,0)";
 
 	ctx.beginPath();
-	ctx.arc(this.x-13, this.y-13, 36, 0, 2 * Math.PI);
+	ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
 	ctx.fill();	
 	ctx.fillStyle = "rgb(51,51,51)";
 }
