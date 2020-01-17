@@ -39,7 +39,7 @@ wss.on("connection", function(ws, require)
 		ws.send(JSON.stringify("play"));
 
 		//ws.close();	
-	},000);
+	},3000);
 
 
 	update = function()

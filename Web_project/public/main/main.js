@@ -14,14 +14,14 @@ socket.onmessage = function(event)
 
 	if(stats == "play")
 	{
-		console.log("playing");
+		//console.log("playing");
 		document.getElementById("main").style.display = "block";
 		document.getElementById("waiting").style.display = "none";
 		setTimer();						
 	}
 	else
 	{
-		console.log(event.data);
+	//	console.log(event.data);
 	}
 };
 
@@ -32,7 +32,7 @@ function setTimer()
 {
 	setTimeout(setTimer, 1000);
 	document.getElementById("timer").innerHTML = ("0" + min).slice(-2) + ":" + ("0" + sec).slice(-2);
-	console.log(min + ":" + sec);
+
 	sec++;
 	if(sec >= 60)
 	{
@@ -138,6 +138,18 @@ label.prototype.show = function()
 	fill("rgb(0,0,0)");
 	fill('rgba(22,21,22,100)');
 	ctx.fillText(this.text, this.x, this.y);
+}
+
+//Queue class
+function queue()
+{
+	//this.head = ;
+	//this.tail = ;
+}
+
+queue.prototype.enqueue = function()
+{
+
 }
 
 
