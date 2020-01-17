@@ -6,7 +6,7 @@ function setup()
 
 var x = 0;
 var y = 0;
-let test = new blob(window.innerWidth/2,145,40, "#404050");
+let test = new blob(window.innerWidth/2,145,50, "#404050");
 function draw()
 {
 	background("#212121");
@@ -23,9 +23,9 @@ function draw()
 	test.show();
 	test.update();
 
-	var img = new Image();
-	img.src = "image.png";
-	ctx.drawImage(img,window.innerWidth/2-325, window.innerHeight/2-250, 700, 600);	
+	//var img = new Image();
+	//img.src = "image.png";
+	//ctx.drawImage(img,window.innerWidth/2-325, window.innerHeight/2-250, 700, 600);	
 }
 
 function onResize()
@@ -54,7 +54,7 @@ blob.prototype.show = function()
 	ctx.beginPath();
 	ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
 	ctx.fill();	
-	ctx.stroke();
+	//ctx.stroke();
 	
 	ctx.fillStyle = "rgb(51,51,51)";
 }
@@ -64,7 +64,7 @@ blob.prototype.update = function()
 	if(!this.fall)
 	{
 		this.vx = (MouseX - this.x)/20;
-		//this.vy = (MouseY - this.y)/20;
+	//	this.vy = (MouseY - this.y)/20;
 
 		if(isNaN(this.vx))
 		{
@@ -79,6 +79,11 @@ blob.prototype.update = function()
 	{
 		this.vx = 0;
 		this.vy = 10;
+	}
+	
+	if(this.y > window.innerHeight/2-250+600+(-this.size+15)*2+15.5)
+	{
+		this.vy = 0;
 	}
 
 	this.x += this.vx;

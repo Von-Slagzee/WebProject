@@ -3,6 +3,43 @@ var MouseY;
 var mouseDown;
 
 
+var x = document.getElementById("main").style.display = "none";
+
+var socket = new WebSocket("ws://localhost:3000");
+
+socket.onmessage = function(event)
+{
+	var stats = JSON.parse(event.data);	
+
+
+	if(stats == "play")
+	{
+		console.log("playing");
+		document.getElementById("main").style.display = "block";
+		document.getElementById("waiting").style.display = "none";
+		setTimer();						
+	}
+	else
+	{
+		console.log(event.data);
+	}
+};
+
+let sec = 0;
+let min = 0;
+
+function setTimer()
+{
+	setTimeout(setTimer, 1000);
+	document.getElementById("timer").innerHTML = ("0" + min).slice(-2) + ":" + ("0" + sec).slice(-2);
+	console.log(min + ":" + sec);
+	sec++;
+	if(sec >= 60)
+	{
+		sec-=60;
+		min++;
+	}
+}
 
 
 window.addEventListener('resize', onResize);

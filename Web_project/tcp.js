@@ -34,6 +34,14 @@ app.get("/*", function(req, res)
 
 wss.on("connection", function(ws, require)
 {
+	setTimeout(function()
+	{
+		ws.send(JSON.stringify("play"));
+
+		//ws.close();	
+	},000);
+
+
 	update = function()
 	{
 		var x = [];
