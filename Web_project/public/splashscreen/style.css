@@ -51,11 +51,7 @@ body
 
 }
 
-span
-{
-	font-color: transparent;
 
-}
 .play:active
 {
 	background: coral !important;
