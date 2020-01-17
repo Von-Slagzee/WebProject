@@ -1,15 +1,15 @@
 function setup()
 {
 	size(window.innerWidth, window.innerHeight);
-	background('rgb(51,51,51)');
+	background('#212121');
 }
 
 var x = 0;
 var y = 0;
-let test = new blob(window.innerWidth/2,145,36);
+let test = new blob(window.innerWidth/2,145,36, "#404050");
 function draw()
 {
-	background("rbg(51,51,51)");
+	background("#212121");
 	//ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
 	//background('rgb(51,51,51)');
 	if(mouseDown)
@@ -23,9 +23,9 @@ function draw()
 	test.show();
 	test.update();
 
-	var img = new Image();
-	img.src = "image.png";
-	ctx.drawImage(img,window.innerWidth/2-325, window.innerHeight/2-250, 650, 500);	
+	//var img = new Image();
+	//img.src = "image.png";
+	//ctx.drawImage(img,window.innerWidth/2-325, window.innerHeight/2-250, 650, 500);	
 }
 
 function onResize()
@@ -35,8 +35,9 @@ function onResize()
 	y = 0;
 }
 
-function blob(x,y,size)
+function blob(x,y,size,color)
 {
+	this.color = color;
 	this.fall = false;
 	this.vx = 0;
 	this.vy = 0;
@@ -47,11 +48,14 @@ function blob(x,y,size)
 
 blob.prototype.show = function()
 {
-	ctx.fillStyle = "rgb(255,0,0)";
-
+	ctx.fillStyle = this.color;
+	ctx.strokeStyle = "#777777";	
+	ctx.lineWidth = 7;
 	ctx.beginPath();
 	ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
 	ctx.fill();	
+	ctx.stroke();
+	
 	ctx.fillStyle = "rgb(51,51,51)";
 }
 
