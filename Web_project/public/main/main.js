@@ -2,6 +2,9 @@ var MouseX;
 var MouseY;
 var mouseDown;
 
+
+
+
 window.addEventListener('resize', onResize);
 
 window.addEventListener('mousedown', e => {
@@ -100,6 +103,8 @@ label.prototype.show = function()
 	ctx.fillText(this.text, this.x, this.y);
 }
 
+
+//do these once the game runs
 execSetup();
 repeatDraw();
 

@@ -4,6 +4,7 @@ Canvas
 }
 body
 {
+	background: black;
 	padding:0;
 	margin:0;
 }
@@ -26,3 +27,8 @@ body
 	border-radius: 10px; 
 	color: #989898;
 }
+.main
+{
+
+}
+
