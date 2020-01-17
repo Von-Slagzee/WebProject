@@ -34,6 +34,7 @@ img {
 
 .menu
 {
+	pointer-events:none;
 	position:absolute; 
 	left: 25; 
 	top:10;

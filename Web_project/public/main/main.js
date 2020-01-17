@@ -3,7 +3,7 @@ var MouseY;
 var mouseDown;
 
 
-var x = document.getElementById("main").style.display = "none";
+document.getElementById("main").style.display = "none";
 
 var socket = new WebSocket("ws://localhost:3000");
 
