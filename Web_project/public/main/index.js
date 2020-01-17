@@ -6,7 +6,7 @@ function setup()
 
 var x = 0;
 var y = 0;
-let test = new blob(window.innerWidth/2,145,36, "#404050");
+let test = new blob(window.innerWidth/2,145,40, "#404050");
 function draw()
 {
 	background("#212121");
@@ -23,9 +23,9 @@ function draw()
 	test.show();
 	test.update();
 
-	//var img = new Image();
-	//img.src = "image.png";
-	//ctx.drawImage(img,window.innerWidth/2-325, window.innerHeight/2-250, 650, 500);	
+	var img = new Image();
+	img.src = "image.png";
+	ctx.drawImage(img,window.innerWidth/2-325, window.innerHeight/2-250, 700, 600);	
 }
 
 function onResize()
