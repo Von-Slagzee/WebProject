@@ -2,15 +2,21 @@ var MouseX;
 var MouseY;
 var mouseDown;
 
-
 document.getElementById("main").style.display = "none";
 
 var socket = new WebSocket("ws://localhost:3000");
 
+//request matchmaking from server
+setTimeout(function()
+{
+	socket.send("play");
+}, 1000);
+
 socket.onmessage = function(event)
 {
+	console.log(event.data);
+	
 	var stats = JSON.parse(event.data);	
-
 
 	if(stats == "play")
 	{

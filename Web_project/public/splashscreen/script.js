@@ -30,8 +30,14 @@ window.onload = function()
 
 var socket = new WebSocket("ws://localhost:3000");
 
+socket.onopen = function()
+{
+	//request stats feed
+	socket.send("stats");
+}
 socket.onmessage = function(event)
 {
+	console.log(event.data);
 	var stats = JSON.parse(event.data);	
 
 	if(stats[0] == "stats")

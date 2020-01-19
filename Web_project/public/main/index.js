@@ -1,5 +1,7 @@
 let blobs = [];
 let current_index;
+let width;
+let height;
 
 const colors = {
 	bg: "#444455",
@@ -11,6 +13,8 @@ const colors = {
 function setup()
 {
 	size(window.innerWidth, window.innerHeight);
+	height =  window.innerHeight;
+	width = window.innerWidth;
 	current_index = 0;
 	background(colors.bg);
 
@@ -56,11 +60,24 @@ function draw()
 	ctx.drawImage(img,window.innerWidth/2-325, window.innerHeight/2-250, 700, 600);	
 }
 
+//temporary thing; to prevent annoying accidental clicks
+var lastclicked = -1;
 function mouseClicked()
 {
-	blobs[current_index].fall = true;
-	current_index++;
-	blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
+	if(lastclicked != sec + 60*min)
+	{
+		blobs[current_index].fall = true;
+		current_index++;
+		blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
+	lastclicked = sec + 60*min;
+		socket.send(JSON.stringify(
+			{
+				message: "details",
+				blob: blobs[current_index],
+				width: width,
+				height: height
+			}));
+	}
 
 	//current_index-1 ball will collide soon, with ground or other disks
 	//check for that
@@ -69,8 +86,14 @@ function mouseClicked()
 function onResize()
 {
 	size(window.innerWidth, window.innerHeight);
-	x = 0;
-	y = 0;
+
+	for(var i = 0; i < current_index; i++)
+	{
+		blobs[i].correctPos(width,height);
+	}
+		
+	width = window.innerWidth;
+	height = window.innerHeight;
 }
 
 function blob(x,y,size,color)
@@ -136,4 +159,26 @@ blob.prototype.update = function()
 		
 	}
 }
+
+blob.prototype.correctPos = function(width, height)
+{
+	//corrects position of a single blob based
+	//on its position in the windoow relative to window size;
+	//not ideal due to the way the board is place
+	//but works for now
+	//if teh board placement is fixed this part would work great
+	//especially the y axis since it has a padding on top	
+	this.x = this.x / width*window.innerWidth;
+	this.y = this.y / height*window.innerHeight;
+}
+
+
+
+
+
+
+
+
+
+
 
