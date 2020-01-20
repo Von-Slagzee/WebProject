@@ -99,6 +99,14 @@ function draw()
 					
 	}
 
+	try
+	{
+		sendmsg({
+			status: "mouseX",
+			content: MouseX
+		});
+	}catch{}
+
 	var img = new Image();
 	img.src = "image.png";
 	ctx.drawImage(img,boardX, boardY, 700, 600);	
@@ -211,17 +219,25 @@ blob.prototype.update = function()
 	{
 		if(!this.fall)
 		{
-			this.vx = (MouseX - this.x)/20;
-		//	this.vy = (MouseY - this.y)/20;
+			//if(turn)
+			//{
+				this.vx = (MouseX - this.x)/20;
+				//this.vy = (MouseY - this.y)/20;
 	
-			if(isNaN(this.vx))
-			{
-				this.vx = 0;
-			}
-			if(isNaN(this.vy))
-			{
-				this.vy = 0;
-			}
+				if(isNaN(this.vx))
+				{
+					this.vx = 0;
+				}
+				if(isNaN(this.vy))
+				{
+					this.vy = 0;
+				}
+			//}
+			//else
+			//{
+			//	this.vx = Math.random()*12-6;
+			//	this.vy = 0;
+			//}
 		}
 		else
 		{

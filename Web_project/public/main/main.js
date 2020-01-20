@@ -5,7 +5,7 @@ var turn;
 
 document.getElementById("main").style.display = "none";
 
-var socket = new WebSocket("ws://localhost:3000");
+var socket = new WebSocket("ws://192.168.1.72:3000");
 
 
 socket.onopen= function()
@@ -22,8 +22,6 @@ socket.onopen= function()
 
 socket.onmessage = function(event)
 {
-	console.log(event.data);
-	
 	var stats = JSON.parse(event.data);	
 
 	if(stats.status == "play")
@@ -45,7 +43,10 @@ socket.onmessage = function(event)
 		blobs[current_index].fall = true;
 		current_index++;
 		blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
-
+	}
+	else if(stats.status == "mouseX")
+	{
+		MouseX = stats.content;
 	}
 	else
 	{
@@ -81,8 +82,11 @@ window.addEventListener('mouseup', e => {
 });
 
 window.addEventListener("mousemove", () => {
-	 MouseX = event.clientX;
-	 MouseY = event.clientY;
+	if(turn)
+	{
+	 	MouseX = event.clientX;
+	 	MouseY = event.clientY;
+	}
  }); 
 
 var canvas = document.getElementById("canvas");

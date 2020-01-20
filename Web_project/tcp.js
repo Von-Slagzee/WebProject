@@ -191,6 +191,10 @@ wss.on("connection", function(ws, require)
 					}));
 				}
 			}
+			else if(message.status == "mouseX")
+			{
+				
+			}
 		}
 		catch(error)
 		{
