@@ -6,13 +6,18 @@ document.getElementById("main").style.display = "none";
 
 var socket = new WebSocket("ws://localhost:3000");
 
-//request matchmaking from server
-setTimeout(function()
+
+socket.onopen= function()
 {
-	socket.send(JSON.stringify({
-		status: "play"
-	}));
-}, 000);
+	//request matchmaking from server
+	setTimeout(function()
+	{
+		socket.send(JSON.stringify({
+			status: "play"
+		}));
+	}, 000);
+
+}
 
 socket.onmessage = function(event)
 {
