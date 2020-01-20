@@ -90,9 +90,16 @@ wss.on("connection", function(ws, require)
 				{
 					playing.push({
 						red: waiting.pop(),
-						blue: waiting.pop()
+						blue: waiting.pop(),
+						matrix: []
 						
-					});	
+					});
+				
+					for(var i = 0; i < 7; i++)
+					{
+						playing[playing.length-1].matrix[i] = [];
+					}
+
 					playing[playing.length-1].red.ws.send(JSON.stringify(
 					{
 						status: "play"
@@ -102,6 +109,19 @@ wss.on("connection", function(ws, require)
 					{
 						status: "play"
 					}));
+
+					playing[playing.length-1].blue.ws.send(JSON.stringify(
+					{
+						status: "turn",
+						content: true
+					}));
+				
+					playing[playing.length-1].red.ws.send(JSON.stringify(
+					{
+						status: "turn",
+						content: false
+					}));
+					
 
 				}
 			}
@@ -123,6 +143,52 @@ wss.on("connection", function(ws, require)
 						//BREAK
 						i = playing.length;
 					}
+				}
+			}
+			else if(message.status == "move")
+			{
+				var playing_index = 0;
+				for(var i = 0; i < playing.length; i++)
+				{
+					if(playing[i].blue.id == id || playing[i].blue.id == id)
+					{
+						playing_index = i;
+						console.log(playing_index);
+						console.log(playing[playing_index]);
+					}
+				}
+				
+				ws.send(JSON.stringify(
+				{
+					status: "turn",
+					content: false
+				}));
+
+				if(id % 2 == 0)
+				{
+					playing[playing_index].matrix[message.column].push("blue");	
+
+					playing[playing_index].red.ws.send(JSON.stringify({
+						status: "move",
+						column: message.column
+					}));
+					playing[playing_index].red.ws.send(JSON.stringify({
+						status: "turn",
+						content: true
+					}));
+
+				}
+				else
+				{
+					playing[playing_index].matrix[message.column].push("red");					
+					playing[playing_index].blue.ws.send(JSON.stringify({
+						status: "move",
+						column: message.column
+					}));
+					playing[playing_index].blue.ws.send(JSON.stringify({
+						status: "turn",
+						content: true
+					}));
 				}
 			}
 		}

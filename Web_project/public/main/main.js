@@ -1,6 +1,7 @@
 var MouseX;
 var MouseY;
 var mouseDown;
+var turn;
 
 document.getElementById("main").style.display = "none";
 
@@ -31,6 +32,20 @@ socket.onmessage = function(event)
 		document.getElementById("main").style.display = "block";
 		document.getElementById("waiting").style.display = "none";
 		setTimer();						
+	}
+	else if(stats.status == "turn")
+	{
+		turn = stats.content;
+	}
+	else if(stats.status == "move")
+	{
+		matrix[stats.column].push("whatever");
+		
+		blobs[current_index].x = boardX + 100 * stats.column + 50;
+		blobs[current_index].fall = true;
+		current_index++;
+		blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
+
 	}
 	else
 	{

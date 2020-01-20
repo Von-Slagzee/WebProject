@@ -3,6 +3,13 @@ let current_index;
 let width;
 let height;
 
+let matrix = [];
+
+for(var i = 0; i < 7; i++)
+{
+	matrix[i] = [];
+}
+
 const colors = {
 	bg: "#444455",
 	blue: "#606080",
@@ -59,6 +66,9 @@ function switchcolors()
 var x = 0;
 var y = 0;
 
+var boardX = window.innerWidth/2-325;
+var boardY  = window.innerHeight/2-250;
+
 function draw()
 {
 	background(colors.bg);
@@ -91,36 +101,75 @@ function draw()
 
 	var img = new Image();
 	img.src = "image.png";
-	ctx.drawImage(img,window.innerWidth/2-325, window.innerHeight/2-250, 700, 600);	
+	ctx.drawImage(img,boardX, boardY, 700, 600);	
 }
 
 //temporary thing; to prevent annoying accidental clicks
 var lastclicked = -1;
 function mouseClicked()
 {
-	if(lastclicked != sec + 60*min)
+	if(turn && lastclicked != sec + 60*min)
 	{
-		switchcolors();
-		blobs[current_index].fall = true;
-		current_index++;
-		blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
-	lastclicked = sec + 60*min;
-		socket.send(JSON.stringify(
+		//check if blob is in decent place
+		if(checkblob())
+		{
+			var temp_col = Math.floor((blobs[current_index].x-boardX)/100);
+			switchcolors();
+			matrix[temp_col].push(blobs[current_index].color);
+			
+			//sending col number
+			socket.send(JSON.stringify(
+			{
+				status: "move",
+				column: temp_col
+			}));
+
+			blobs[current_index].fall = true;
+			current_index++;
+			blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
+			lastclicked = sec + 60*min;
+			socket.send(JSON.stringify(
 			{
 				message: "details",
 				blob: blobs[current_index],
 				width: width,
 				height: height
 			}));
-	}
 
+		}
+
+	}
+	
 	//current_index-1 ball will collide soon, with ground or other disks
 	//check for that
 }
 
+function checkblob()
+{
+	if(blobs[current_index].x > boardX+40 && blobs[current_index].x < boardX+660)
+	{
+		for(var i = boardX+100; i < boardX+700; i+=100)
+		{
+			if(blobs[current_index].x > i - 30 && blobs[current_index].x < i + 30)
+			{
+				return false;
+			}
+		}
+		if(matrix[Math.floor((blobs[current_index].x-boardX)/100)].length == 6 )
+		{
+			return false;	
+		}
+		return true;
+	}
+	return false;
+}
+
+
 function onResize()
 {
 	size(window.innerWidth, window.innerHeight);
+	boardX = window.innerWidth/2-325;
+ 	boardY  = window.innerHeight/2-250;
 
 	for(var i = 0; i < current_index; i++)
 	{
@@ -206,9 +255,6 @@ blob.prototype.correctPos = function(width, height)
 	this.x = this.x / width*window.innerWidth;
 	this.y = this.y / height*window.innerHeight;
 }
-
-
-
 
 
 
