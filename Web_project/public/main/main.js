@@ -40,7 +40,7 @@ socket.onmessage = function(event)
 	else if(stats.status == "move")
 	{
 		matrix[stats.column].push("whatever");
-		
+		switchcolors();	
 		blobs[current_index].x = boardX + 100 * stats.column + 50;
 		blobs[current_index].fall = true;
 		current_index++;

@@ -155,7 +155,7 @@ function checkblob()
 				return false;
 			}
 		}
-		if(matrix[Math.floor((blobs[current_index].x-boardX)/100)].length == 6 )
+		if(matrix[Math.floor((blobs[current_index].x-boardX)/100)].length >= 6 )
 		{
 			return false;	
 		}
