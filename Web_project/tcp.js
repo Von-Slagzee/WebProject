@@ -150,7 +150,7 @@ wss.on("connection", function(ws, require)
 				var playing_index = 0;
 				for(var i = 0; i < playing.length; i++)
 				{
-					if(playing[i].blue.id == id || playing[i].blue.id == id)
+					if(playing[i].blue.id == id || playing[i].red.id == id)
 					{
 						playing_index = i;
 						console.log(playing_index);
