@@ -21,9 +21,43 @@ function setup()
 	blobs.push(new blob(window.innerWidth/2,145,50, colors.blue));
 }
 
+function switchcolors()
+{
+	var turn = document.getElementById("turn");
+//	var menus = document.getElementsByClassName("submenu");	
+
+	var ref; 
+	if(blobs[current_index].color == colors.red)
+	{
+		//turn blue
+		ref = {
+			bg: "#444455",
+			turn: "Blue"
+		}
+
+	}
+	else
+	{
+		//turn red
+		ref = {
+			bg: "#554444",
+			turn: "Red"
+		}
+
+	}
+	
+	turn.innerHTML = ref.turn;
+	colors.bg = ref.bg;
+
+//	for(var i = 0; i < menus.length; i++)
+//	{
+//		menus[i].style.background = ref.bg;
+//	}
+
+}
+
 var x = 0;
 var y = 0;
-
 
 function draw()
 {
@@ -66,6 +100,7 @@ function mouseClicked()
 {
 	if(lastclicked != sec + 60*min)
 	{
+		switchcolors();
 		blobs[current_index].fall = true;
 		current_index++;
 		blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
