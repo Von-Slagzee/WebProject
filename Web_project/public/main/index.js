@@ -131,10 +131,14 @@ function mouseClicked()
 				status: "move",
 				column: temp_col
 			}));
-
+			
+			blobs.push(new blob(blobs[current_index].x,145,50, current_index+1%2==0 ? colors.blue:colors.red));
+			
+			//snap blob to that place
+			blobs[current_index].x = boardX + 100 * temp_col + 50;
+			
 			blobs[current_index].fall = true;
 			current_index++;
-			blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
 			lastclicked = sec + 60*min;
 			socket.send(JSON.stringify(
 			{
