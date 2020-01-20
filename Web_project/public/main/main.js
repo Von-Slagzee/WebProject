@@ -9,8 +9,10 @@ var socket = new WebSocket("ws://localhost:3000");
 //request matchmaking from server
 setTimeout(function()
 {
-	socket.send("play");
-}, 1000);
+	socket.send(JSON.stringify({
+		status: "play"
+	}));
+}, 000);
 
 socket.onmessage = function(event)
 {
@@ -18,7 +20,7 @@ socket.onmessage = function(event)
 	
 	var stats = JSON.parse(event.data);	
 
-	if(stats == "play")
+	if(stats.status == "play")
 	{
 		//console.log("playing");
 		document.getElementById("main").style.display = "block";
@@ -144,6 +146,17 @@ label.prototype.show = function()
 	fill("rgb(0,0,0)");
 	fill('rgba(22,21,22,100)');
 	ctx.fillText(this.text, this.x, this.y);
+}
+
+//sending a message to opponent
+//for fun ig
+function sendmsg(msg)
+{
+	socket.send(JSON.stringify(
+	{
+		status: "message",
+		content: msg
+	}));	
 }
 
 //Queue class

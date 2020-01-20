@@ -33,7 +33,9 @@ var socket = new WebSocket("ws://localhost:3000");
 socket.onopen = function()
 {
 	//request stats feed
-	socket.send("stats");
+	socket.send(JSON.stringify({
+		status: "stats"
+	}));
 }
 socket.onmessage = function(event)
 {
