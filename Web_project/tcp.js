@@ -178,7 +178,7 @@ wss.on("connection", function(ws, require)
 					content: true
 				}));
 				
-				checkgamestats(playing_index,ws,sendto);
+				checkgamestats(playing_index,ws,sendto,message,id);
 			}
 		}
 		catch(error)
@@ -189,19 +189,101 @@ wss.on("connection", function(ws, require)
 	});
 });
 
-function checkgamestats(playing_index, lastmover, opponent)
+function checkgamestats(playing_index, lastmover, opponent, message, id)
 {
 	var status;
-
+	var col;
 	//check if draw
+	if(id % 2 == 0)	
+	{
+		//is blue
+		col = "blue";
+	}
+	else
+	{
+		col = "red";
+
+	}
+	
+	var matrix = playing[playing_index].matrix;
 	for(var i = 0; i < playing[playing_index].matrix.length; i++)
 	{
    		if(playing[playing_index].matrix[i].length < 6)
    	 	{
-		  	//not a draw
-			return false;
+			//not a draw;
 			//check for win here
+			let counter = 0; 
+			let j = message.column;
+			let ii = matrix[j].length-1;
+			for(var a = 0; a < 7; a++)
+			{
+				if(matrix[a].length>=i && matrix[a][ii]== col)
+					counter++;
+				else
+					counter = 0;
+			}
+			if(counter>=4)
+			{
+				status = {
+					status: "finale",
+					content: col + " Wins!"
+				}
+			}
+			else
+			{
+				counter = 0;
+				for(var a=0; a<=ii; a++)
+				{
+					if(matrix[j][a]== col)
+						counter++;
+					else
+						counter = 0;
+				}
+				if(counter>=4)
+				{
+					//the winning scenario should be applied
+					status = {
+						status: "finale",
+						content: col + " Wins!"
+					}
+				}
+				else
+				{
+					counter = 0;
+					let counter2 = 0;
+					for(var a=0; a<=6; a++)
+						for(var b=0; b<=5; b++)
+						{
+							if(matrix[a].length>=b&&(a-b==j-i)&&matrix[a][b]== col)
+								counter++;
+							else
+								counter = 0;
+							if(matrix[a].length>=b&&(a+b==j+i)&&matrix[a][b]== col)
+								counter2++;
+							else
+								counter2 = 0;
+						}
+					if(counter>=4||counter2>=4)
+					{
+						//the winning scenario should be applied
+						status = {
+							status: "finale",
+							content: col + " Wins!"
+						}
+					}
+				}
+				if(status == undefined)
+				{
+					return false;
+				}
+				else
+				{
+					lastmover.send(JSON.stringify(status));
+					opponent.send(JSON.stringify(status));	
+					return false;
+				}
 
+			}
    	 	} 
 	}
 	//is a draw
