@@ -252,6 +252,7 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 					counter = 0;
 					let counter2 = 0;
 					for(var a=0; a<=6; a++)
+					{
 						for(var b=0; b<=5; b++)
 						{
 							if(matrix[a].length>=b&&(a-b==j-i)&&matrix[a][b]== col)
@@ -263,6 +264,48 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 							else
 								counter2 = 0;
 						}
+					}	
+					
+					var mindi =
+					{
+						x: 0,
+						y: 0
+					};
+					j-=1;
+					if(j + ii > 5)
+					{
+						mindi.y = 5;
+						mindi.x = j + ii - 5;
+					}
+					else
+					{
+						mindi.x = 0;
+						mindi.y = ii+j;
+					}
+					var l = mindi.y;
+					console.log({
+						i: ii,
+						j: j,
+						x: mindi.x,
+						y: mindi.y,
+						matrix: matrix
+					});
+					for(var k = mindi.x; k < 7 && l < 6; k++)
+					{
+						if(matrix[k][l] == col)
+						{
+							counter++;
+						}
+						else
+						{
+							if(counter < 4)
+							{
+								counter = 0;
+							}
+						}
+						l++;				
+					}
+					
 					if(counter>=4||counter2>=4)
 					{
 						//the winning scenario should be applied
@@ -298,15 +341,4 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
