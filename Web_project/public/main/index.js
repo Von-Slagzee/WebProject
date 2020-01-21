@@ -13,7 +13,8 @@ for(var i = 0; i < 7; i++)
 const colors = {
 	bg: "#444455",
 	blue: "#606080",
-	red: "#806060"
+	red: "#806060",
+	stroke: "#777777"
 };
 
 
@@ -31,7 +32,6 @@ function setup()
 function switchcolors()
 {
 	var turn = document.getElementById("turn");
-//	var menus = document.getElementsByClassName("submenu");	
 
 	var ref; 
 	if(blobs[current_index].color == colors.red)
@@ -55,11 +55,6 @@ function switchcolors()
 	
 	turn.innerHTML = ref.turn;
 	colors.bg = ref.bg;
-
-//	for(var i = 0; i < menus.length; i++)
-//	{
-//		menus[i].style.background = ref.bg;
-//	}
 
 }
 
@@ -132,28 +127,26 @@ function mouseClicked()
 				column: temp_col
 			}));
 			
-			blobs.push(new blob(blobs[current_index].x,145,50, current_index+1%2==0 ? colors.blue:colors.red));
+			blobs.push(new blob(blobs[current_index].x,145,50, blobs[current_index].color == colors.red ? colors.blue:colors.red));
 			
 			//snap blob to that place
 			blobs[current_index].x = boardX + 100 * temp_col + 50;
 			
+			blobs[current_index].column = temp_col;
+			blobs[current_index].row = matrix[temp_col].length-1;
+			
 			blobs[current_index].fall = true;
 			current_index++;
+			
+			blobs[current_index].column = temp_col;
+			blobs[current_index].row = matrix[temp_col].length;
+
 			lastclicked = sec + 60*min;
-			socket.send(JSON.stringify(
-			{
-				message: "details",
-				blob: blobs[current_index],
-				width: width,
-				height: height
-			}));
 
 		}
 
 	}
 	
-	//current_index-1 ball will collide soon, with ground or other disks
-	//check for that
 }
 
 function checkblob()
@@ -162,7 +155,7 @@ function checkblob()
 	{
 		for(var i = boardX+100; i < boardX+700; i+=100)
 		{
-			if(blobs[current_index].x > i - 30 && blobs[current_index].x < i + 30)
+			if(blobs[current_index].x > i - 20 && blobs[current_index].x < i + 20)
 			{
 				return false;
 			}
@@ -207,14 +200,14 @@ function blob(x,y,size,color)
 blob.prototype.show = function()
 {
 	ctx.fillStyle = this.color;
-	ctx.strokeStyle = "#777777";	
-	ctx.lineWidth = 7;
+	//ctx.strokeStyle = colors.stroke;	
+	//ctx.lineWidth = 7;
 	ctx.beginPath();
 	ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
 	ctx.fill();	
 	//ctx.stroke();
 	
-	ctx.fillStyle = "rgb(51,51,51)";
+	ctx.fillStyle = colors.bg;
 }
 
 blob.prototype.update = function()
@@ -223,25 +216,16 @@ blob.prototype.update = function()
 	{
 		if(!this.fall)
 		{
-			//if(turn)
-			//{
-				this.vx = (MouseX - this.x)/20;
-				//this.vy = (MouseY - this.y)/20;
-	
-				if(isNaN(this.vx))
-				{
-					this.vx = 0;
-				}
-				if(isNaN(this.vy))
-				{
-					this.vy = 0;
-				}
-			//}
-			//else
-			//{
-			//	this.vx = Math.random()*12-6;
-			//	this.vy = 0;
-			//}
+			this.vx = (MouseX - this.x)/20;
+
+			if(isNaN(this.vx))
+			{
+				this.vx = 0;
+			}
+			if(isNaN(this.vy))
+			{
+				this.vy = 0;
+			}
 		}
 		else
 		{
@@ -256,24 +240,20 @@ blob.prototype.update = function()
 
 		this.x += this.vx;
 		this.y += this.vy;
-
-	}
-	else
-	{
-		
 	}
 }
 
 blob.prototype.correctPos = function(width, height)
 {
 	//corrects position of a single blob based
-	//on its position in the windoow relative to window size;
-	//not ideal due to the way the board is place
-	//but works for now
-	//if teh board placement is fixed this part would work great
-	//especially the y axis since it has a padding on top	
-	this.x = this.x / width*window.innerWidth;
-	this.y = this.y / height*window.innerHeight;
+	// on column and row
+	
+	this.x = boardX + 100 * this.column + 50;
+	
+	this.y = boardY + 100 * (6-this.row) - 50;
+
+
+
 }
 
 

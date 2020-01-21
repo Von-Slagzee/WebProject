@@ -5,7 +5,7 @@ var turn;
 
 document.getElementById("main").style.display = "none";
 
-var socket = new WebSocket("ws://localhost:3000");
+var socket = new WebSocket("ws://192.168.1.72:3000");
 
 
 socket.onopen= function()
@@ -26,6 +26,7 @@ socket.onmessage = function(event)
 
 	if(stats.status == "play")
 	{
+		//console.log("playing");
 		document.getElementById("main").style.display = "block";
 		document.getElementById("waiting").style.display = "none";
 		setTimer();						
@@ -39,8 +40,6 @@ socket.onmessage = function(event)
 		matrix[stats.column].push("whatever");
 		switchcolors();	
 		blobs[current_index].x = boardX + 100 * stats.column + 50;
-		blobs[current_index].column = stats.column;
-		blobs[current_index].row = matrix[stats.column].length-1;
 		blobs[current_index].fall = true;
 		current_index++;
 		blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
@@ -48,6 +47,10 @@ socket.onmessage = function(event)
 	else if(stats.status == "mouseX")
 	{
 		MouseX = stats.content;
+	}
+	else
+	{
+	//	console.log(event.data);
 	}
 };
 
@@ -113,6 +116,62 @@ function background(color)
 	ctx.fillRect(0,0,canvas.width,canvas.height);
 }
 
+//these functions limit the total ability of the program 
+//therefore, they are only used in certain cases
+//ie, used only to prevent redundancy
+
+function fill(color)
+{
+	//needs better implementation
+	//ctx.strokeStyle = 'rgba(220,210,222,15)';
+	ctx.fillStyle = color;
+
+}
+
+function stroke(color)
+{
+	ctx.strokeStyle = color;
+}
+
+function ellipse(x, y, width, height)
+{
+	ctx.beginPath();
+	ctx.ellipse(x, y, width, height, 0, 0, Math.PI * 2);	
+}
+
+
+function strokeWeight(weight)
+{
+	ctx.lineWidth = weight;
+}
+
+function rect(x, y, width, height)
+{
+	ctx.beginPath();
+	ctx.rect(x, y, width, height);
+
+	//ctx.fill();
+}
+
+
+function label(x, y, text)
+{
+	this.x = x;
+	this.y = y;
+	this.text = text;
+}
+
+label.prototype.show = function()
+{
+	fill("rgb(255,255,255)");
+	//rect(this.x,this.y, 400,200);
+	//ctx.fill();
+	ctx.font = "30px Arial";
+	fill("rgb(0,0,0)");
+	fill('rgba(22,21,22,100)');
+	ctx.fillText(this.text, this.x, this.y);
+}
+
 //sending a message to opponent
 //for fun ig
 function sendmsg(msg)
@@ -124,6 +183,17 @@ function sendmsg(msg)
 	}));	
 }
 
+//Queue class
+function queue()
+{
+	//this.head = ;
+	//this.tail = ;
+}
+
+queue.prototype.enqueue = function()
+{
+
+}
 
 
 //do these once the game runs
