@@ -217,54 +217,81 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 			let ii = matrix[j].length-1;
 			for(var a = 0; a < 7; a++)
 			{
-				if(matrix[a].length>=i && matrix[a][ii]== col)
+				if(matrix[a].length>=ii && matrix[a][ii]== col)
+				{
 					counter++;
-				else
-					counter = 0;
-			}
-			if(counter>=4)
-			{
-				status = {
-					status: "finale",
-					content: col + " Wins!"
-				}
-			}
-			else
-			{
-				counter = 0;
-				for(var a=0; a<=ii; a++)
-				{
-					if(matrix[j][a]== col)
-						counter++;
-					else
-						counter = 0;
-				}
-				if(counter>=4)
-				{
-					//the winning scenario should be applied
-					status = {
-						status: "finale",
-						content: col + " Wins!"
+					if(counter>=4)
+					{
+						status = {
+							status: "finale",
+							content: col + " Wins!"
+						}
 					}
 				}
 				else
-				{
 					counter = 0;
-					let counter2 = 0;
-					for(var a=0; a<=6; a++)
+			}
+			counter = 0;
+			for(var a=0; a<=ii; a++)
+			{
+				if(matrix[j][a]== col)
+				{
+					counter++;
+					if(counter>=4)
 					{
-						for(var b=0; b<=5; b++)
-						{
-							if(matrix[a].length>=b&&(a-b==j-i)&&matrix[a][b]== col)
-								counter++;
-							else
-								counter = 0;
-							if(matrix[a].length>=b&&(a+b==j+i)&&matrix[a][b]== col)
-								counter2++;
-							else
-								counter2 = 0;
+						//the winning scenario should be applied
+						status = {
+							status: "finale",
+							content: col + " Wins!"
 						}
-					}	
+					}
+				}
+				else
+					counter = 0;
+			}
+			counter = 0;
+			let counter2 = 0;
+			for(var a=0; a<=6; a++)
+			{
+				for(var b=0; b<=5; b++)
+				{
+					if(a-b==j-ii)
+					{
+						if(matrix[a].length>=b&&matrix[a][b]== col)
+						{
+							counter++;
+							console.log(counter);
+							if(counter>=4)
+							{
+								status = {
+									status: "finale",
+									content: col + " Wins!"
+								}
+							}
+						}
+						else
+							counter = 0;
+
+					}
+					if(a+b==j+ii)
+					{
+						if(matrix[a].length>=b&&matrix[a][b]== col)
+						{
+							counter2++;
+							if(counter2>=4)
+							{
+								status = {
+									status: "finale",
+									content: col + " Wins!"
+								}
+							}
+						}
+						else
+							counter2 = 0;
+
+					}
+				}
+			}	
 					
 					var mindi =
 					{
@@ -306,15 +333,6 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 						l++;				
 					}
 					
-					if(counter>=4||counter2>=4)
-					{
-						//the winning scenario should be applied
-						status = {
-							status: "finale",
-							content: col + " Wins!"
-						}
-					}
-				}
 				if(status == undefined)
 				{
 					return false;
@@ -325,8 +343,6 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 					opponent.send(JSON.stringify(status));	
 					return false;
 				}
-
-			}
    	 	} 
 	}
 	//is a draw
