@@ -3,7 +3,10 @@ var MouseY;
 var mouseDown;
 var turn;
 
-document.getElementById("main").style.display = "none";
+var game = document.getElementById("main");
+game.style.display = "none";
+var finale = document.getElementById("final_menu");
+finale.style.display = "none";
 
 var socket = new WebSocket("ws://localhost:3000");
 
@@ -26,7 +29,7 @@ socket.onmessage = function(event)
 
 	if(stats.status == "play")
 	{
-		document.getElementById("main").style.display = "block";
+		game.style.display = "block";
 		document.getElementById("waiting").style.display = "none";
 		setTimer();						
 	}
@@ -48,6 +51,17 @@ socket.onmessage = function(event)
 	else if(stats.status == "mouseX")
 	{
 		MouseX = stats.content;
+	}
+	else if(stats.status == "finale")
+	{
+		turn = false;
+		setTimeout(function() {
+			game.style.display = "none";
+			//show the next page/element
+			document.getElementById("message").innerHTML = stats.content;
+			finale.style.display = "block";
+
+		},000);
 	}
 };
 

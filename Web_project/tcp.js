@@ -1,17 +1,15 @@
 //TODO remove people who left matchmaking
 //TODO what id someone leaves the whole match
-//TODO find a method to keep track of users(if needed in the first place)
-//TODO refreshes as new matches? Really now.
-//TODO transmit opponents moves
-//TODO block access to opponents disk
-//TODO store in data structure that allows wins and losses
 //TODO winning/losing page
-//TODO move in ratios based on clients screen size
-//TODO update game state on clients
-//TODO prevent moves in bad positions
-//TODO work around the limitation of using absolute positions
-//TODO remove the timer thing that stops multiple clicks
-//TODO idk, maybe make an in game chat box? A server without profanity cannot be called a server
+////DONE find a method to keep track of users(if needed in the first place)
+////DONE transmit opponents moves
+////DONE block access to opponents disk
+////DONE store in data structure that allows wins and losses
+////DONE move in ratios based on clients screen size
+////DONE update game state on clients
+////DONE prevent moves in bad positions
+////DONE work around the limitation of using absolute positions
+////DONE remove the timer thing that stops multiple clicks
 
 var express = require("express");
 var http = require("http");;
@@ -94,29 +92,29 @@ wss.on("connection", function(ws, require)
 						matrix: []
 						
 					});
-				
+					var curr = playing.length-1;	
 					for(var i = 0; i < 7; i++)
 					{
-						playing[playing.length-1].matrix[i] = [];
+						playing[curr].matrix[i] = [];
 					}
 
-					playing[playing.length-1].red.ws.send(JSON.stringify(
+					playing[curr].red.ws.send(JSON.stringify(
 					{
 						status: "play"
 					}));
 				
-					playing[playing.length-1].blue.ws.send(JSON.stringify(
+					playing[curr].blue.ws.send(JSON.stringify(
 					{
 						status: "play"
 					}));
 
-					playing[playing.length-1].blue.ws.send(JSON.stringify(
+					playing[curr].blue.ws.send(JSON.stringify(
 					{
 						status: "turn",
 						content: true
 					}));
 				
-					playing[playing.length-1].red.ws.send(JSON.stringify(
+					playing[curr].red.ws.send(JSON.stringify(
 					{
 						status: "turn",
 						content: false
@@ -133,15 +131,12 @@ wss.on("connection", function(ws, require)
 					if(playing[i].red.id == id)
 					{
 						playing[i].blue.ws.send(JSON.stringify(message.content));
-						
-						//BREAK
-						i = playing.length;
+						break;
 					}
 					else if(playing[i].blue.id == id)
 					{
 						playing[i].red.ws.send(JSON.stringify(message.content));
-						//BREAK
-						i = playing.length;
+						break;
 					}
 				}
 			}
@@ -153,8 +148,6 @@ wss.on("connection", function(ws, require)
 					if(playing[i].blue.id == id || playing[i].red.id == id)
 					{
 						playing_index = i;
-						console.log(playing_index);
-						console.log(playing[playing_index]);
 					}
 				}
 				
@@ -164,36 +157,28 @@ wss.on("connection", function(ws, require)
 					content: false
 				}));
 
+				var sendto;
 				if(id % 2 == 0)
 				{
+					sendto = playing[playing_index].red.ws;		
 					playing[playing_index].matrix[message.column].push("blue");	
-
-					playing[playing_index].red.ws.send(JSON.stringify({
-						status: "move",
-						column: message.column
-					}));
-					playing[playing_index].red.ws.send(JSON.stringify({
-						status: "turn",
-						content: true
-					}));
-
 				}
 				else
 				{
+					sendto = playing[playing_index].blue.ws;		
 					playing[playing_index].matrix[message.column].push("red");					
-					playing[playing_index].blue.ws.send(JSON.stringify({
-						status: "move",
-						column: message.column
-					}));
-					playing[playing_index].blue.ws.send(JSON.stringify({
-						status: "turn",
-						content: true
-					}));
 				}
-			}
-			else if(message.status == "mouseX")
-			{
+
+				sendto.send(JSON.stringify({
+				status: "move",
+					column: message.column
+				}));
+				sendto.send(JSON.stringify({
+					status: "turn",
+					content: true
+				}));
 				
+				checkgamestats(playing_index,ws,sendto);
 			}
 		}
 		catch(error)
@@ -203,6 +188,41 @@ wss.on("connection", function(ws, require)
 
 	});
 });
+
+function checkgamestats(playing_index, lastmover, opponent)
+{
+	var status;
+
+	//check if draw
+	for(var i = 0; i < playing[playing_index].matrix.length; i++)
+	{
+   		if(playing[playing_index].matrix[i].length < 6)
+   	 	{
+		  	//not a draw
+			return false;
+			//check for win here
+
+   	 	} 
+	}
+	//is a draw
+
+	status = {
+		status: "finale",
+		content: "Its a Draw!"
+	}
+	lastmover.send(JSON.stringify(status));
+	opponent.send(JSON.stringify(status));	
+	
+
+
+}
+
+
+
+
+
+
+
 
 
 

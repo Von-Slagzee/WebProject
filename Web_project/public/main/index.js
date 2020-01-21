@@ -108,10 +108,9 @@ function draw()
 }
 
 //temporary thing; to prevent annoying accidental clicks
-var lastclicked = -1;
 function mouseClicked()
 {
-	if(turn && lastclicked != sec + 60*min)
+	if(turn)
 	{
 		//check if blob is in decent place
 		if(checkblob())
@@ -141,7 +140,6 @@ function mouseClicked()
 			blobs[current_index].column = temp_col;
 			blobs[current_index].row = matrix[temp_col].length;
 
-			lastclicked = sec + 60*min;
 
 		}
 
