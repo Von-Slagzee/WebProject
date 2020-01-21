@@ -50,6 +50,26 @@ wss.on("connection", function(ws, require)
 {
 	var id = ids;
 	ids++;
+	ws.on('close', function close() {
+		var status = {
+			status: "finale",
+			content: "Sorry, dude disconnected."
+		};
+		for(var i = 0; i < playing.length; i++)
+		{
+			if(playing[i].red.id == id)
+			{
+				playing[i].blue.ws.send(JSON.stringify(status));
+				break;
+			}
+			else if(playing[i].blue.id == id)
+			{
+				playing[i].red.ws.send(JSON.stringify(status));
+				break;
+			}
+		}
+
+	});
 	ws.on("message", function incoming(message)
 	{
 		//temporary message status
