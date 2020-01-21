@@ -1,6 +1,6 @@
-//TODO remove people who left matchmaking
-//TODO what id someone leaves the whole match
-//TODO winning/losing page
+////DONE remove people who left matchmaking
+////DONE what id someone leaves the whole match
+////DONE winning/losing page
 ////DONE find a method to keep track of users(if needed in the first place)
 ////DONE transmit opponents moves
 ////DONE block access to opponents disk
@@ -53,7 +53,7 @@ wss.on("connection", function(ws, require)
 	ws.on('close', function close() {
 		var status = {
 			status: "finale",
-			content: "Sorry, dude disconnected."
+			content: "Sorry, opponent disconnected."
 		};
 		for(var i = 0; i < playing.length; i++)
 		{
