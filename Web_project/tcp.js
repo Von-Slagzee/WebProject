@@ -15,6 +15,8 @@ var express = require("express");
 var http = require("http");;
 var websocket = require("ws");
 var url = require("url");
+var path = require("path");
+var cookies = require("cookie-parser");
 
 var app = express();
 var port = 3000; 
@@ -25,20 +27,62 @@ var waiting = [];
 var playing = [];
 
 var played = 0;
-var idle = 0;
+var idle = 1;
+var visits = 0;
 
 var ids = 0;
 
-app.use(express.static(__dirname + "/public/splashscreen"));
-app.use(express.static(__dirname + "/public/main"));
+//app.use(express.static(__dirname + "/public/splashscreen"));
+app.use(express.static(__dirname + "/public"));
+app.set("views", path.join(__dirname, "views"));
+app.use(cookies());
 
 const wss = new websocket.Server({server});
 
-app.get("/", function(req, res)
+app.get("/", function(req, res, next)
 {
-	res.sendFile(__dirname + "/public/splashscreen/");
+	if(req.cookies["visits"])
+	{
+		visits = parseInt(req.cookies["visits"]); 
+		console.log(visits);
+		visits++;
+	}
+	else
+	{
+		visits = "1";
+	}
+	res.cookie("visits", visits.toString());
+	res.sendFile(__dirname + "/public/splash.html");	
+	next();
+	
 });
 
+app.get("/", function(req, res)
+{
+	var x = "hi";
+
+	res.render("splash.ejs", {
+		visits: visits,//online
+		played: played - playing.length*2,				//played
+		playing: playing.length*2							//playing
+	})
+
+});
+
+app.get("/splashscreen", function(req, res)
+{
+	console.log("sending");
+	res.cookie("addadshellassdssdao");
+	res.sendFile(__dirname + "/public/splashscreen/");	
+});
+
+app.get("/send", function(req, res)
+{
+	console.log("sending");
+	res.cookie("hello");
+	res.send();
+
+});
 app.get("/play", function(req, res)
 {
 	res.sendFile(__dirname + "/public/main/main.html");
@@ -60,10 +104,25 @@ wss.on("connection", function(ws, require)
 	ws.on('close', function close() {
 		if(forstats && idle > 0)
 			idle--;	
+
 		var status = {
 			status: "finale",
 			content: "Sorry, opponent disconnected."
 		};
+		for(var i = 0; i < playing.length; i++)
+		{
+			if(playing[i].red.id == id)
+			{
+				playing[i].blue.ws.send(JSON.stringify(status));
+				break;
+			}
+			else if(playing[i].blue.id == id)
+			{
+				playing[i].red.ws.send(JSON.stringify(status));
+				break;
+			}
+
+		}
 		for(var i = 0; i < waiting.length; i++)
 		{
 			if(waiting[i].id == id)
@@ -92,6 +151,7 @@ wss.on("connection", function(ws, require)
 			message = JSON.parse(message);
 			if(message.status == "stats")
 			{
+				console.log("idle");
 				idle++;
 				forstats = true;
 				update = function()
