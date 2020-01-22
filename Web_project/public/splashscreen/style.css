@@ -39,7 +39,7 @@ body
 	margin:auto;
 
 	background: transparent;
-
+	
 	width: 100px;
 
 	border:solid 1px black;
@@ -49,6 +49,8 @@ body
 
 	padding: 16px 100px 16px 100px;
 
+
+	transition: padding 0.2s;
 }
 
 
@@ -57,6 +59,11 @@ body
 	background: coral !important;
 }
 
+.play:hover
+{
+	padding: 26px 130px 26px 130px;
+
+}
 
 .title
 {

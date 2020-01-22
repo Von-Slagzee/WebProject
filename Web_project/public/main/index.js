@@ -83,8 +83,14 @@ function draw()
 				//check if collision happened
 				if(i!=j && Math.abs(blobs[i].x - blobs[j].x) <= blobs[i].size + blobs[j].size-25)
 				{
-					if(Math.abs(blobs[i].y - blobs[j].y) <= blobs[i].size + blobs[j].size)
+					if(Math.abs(blobs[i].y - blobs[j].y) <= blobs[i].size + blobs[j].size && blobs[i].stop != true)
 					{
+						console.log("here");
+					
+						//setTimeout(function()
+					//	{
+							new Audio("click.wav").play();
+				//		});
 						
 						blobs[i].stop = true;
 					}

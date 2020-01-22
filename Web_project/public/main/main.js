@@ -59,6 +59,8 @@ socket.onmessage = function(event)
 			//game.style.display = "none";
 			//show the next page/element
 			document.getElementById("message").innerHTML = stats.content;
+			document.getElementById("container").style.animation = "finale";
+  			document.getElementById("container").style.animationDuration = "0.7s";
 			finale.style.display = "block";
 
 		},1000);
