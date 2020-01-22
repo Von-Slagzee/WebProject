@@ -46,7 +46,7 @@ socket.onmessage = function(event)
 		blobs[current_index].row = matrix[stats.column].length-1;
 		blobs[current_index].fall = true;
 		current_index++;
-		blobs.push(new blob(blobs[current_index-1].x,145,50, current_index%2==0 ? colors.blue:colors.red));
+		blobs.push(new blob(blobs[current_index-1].x,boardY-65,50, current_index%2==0 ? colors.blue:colors.red));
 	}
 	else if(stats.status == "mouseX")
 	{

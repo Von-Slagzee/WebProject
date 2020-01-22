@@ -28,7 +28,7 @@ function setup()
 	current_index = 0;
 	background(colors.bg);
 
-	blobs.push(new blob(window.innerWidth/2,145,50, colors.blue));
+	blobs.push(new blob(window.innerWidth/2,boardY-65,50, colors.blue));
 }
 
 function switchcolors()
@@ -133,7 +133,7 @@ function mouseClicked()
 				column: temp_col
 			}));
 			
-			blobs.push(new blob(blobs[current_index].x,145,50, blobs[current_index].color == colors.red ? colors.blue:colors.red));
+			blobs.push(new blob(blobs[current_index].x,boardY-65,50, blobs[current_index].color == colors.red ? colors.blue:colors.red));
 			
 			//snap blob to that place
 			blobs[current_index].x = boardX + 100 * temp_col + 50;
@@ -155,7 +155,7 @@ function mouseClicked()
 			setTimeout(function()
 			{
 				wobble = false;
-				blobs[current_index].y = 145;
+				blobs[current_index].y = boardY-65 ;
 			},200);
 
 		}
@@ -167,7 +167,7 @@ function mouseClicked()
 		setTimeout(function()
 		{
 			wobble = false;
-			blobs[current_index].y = 145;
+			blobs[current_index].y = boardY-65 ;
 		},200);
 	}
 	
@@ -204,6 +204,8 @@ function onResize()
 	{
 		blobs[i].correctPos(width,height);
 	}
+
+	blobs[current_index].y = boardY-65 ;
 		
 	width = window.innerWidth;
 	height = window.innerHeight;
