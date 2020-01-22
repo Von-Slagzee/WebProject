@@ -36,8 +36,8 @@ img {
 {
 	color: #515151;	
 	font-family: "arial";
-	font-size: 32pt;
-	margin-top: 80px;
+	font-size: 34pt;
+	margin-top: 60px;
 }
 
 
@@ -62,15 +62,22 @@ img {
 	border-radius: 10px; 
 	color: #989898;
 }
+
+.container
+{
+	position:absolute; 
+	left: 50%;
+	top: 350px;
+}
 #final_menu
 {
+	position: relative;
+	left: -50%;
 	width: 450px;
-	height: 500px;
+	height: 300px;
 	
-	margin: auto;
-	margin-top:12%;
-	
-	background: #fafafa;
+
+	background: #fafafadd;
 
 	border-radius: 20px;
 	border-style: solid;
@@ -93,11 +100,15 @@ img {
 
 	border:solid 1px black;
 
-	margin-top: 100px;;
+	margin-top: 45px;;
 	font-size: 16pt;
 
 	padding: 16px 100px 16px 100px;
 
+}
+.play:active
+{
+	background: coral !important;
 }
 
 

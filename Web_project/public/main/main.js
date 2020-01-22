@@ -56,12 +56,12 @@ socket.onmessage = function(event)
 	{
 		turn = false;
 		setTimeout(function() {
-			game.style.display = "none";
+			//game.style.display = "none";
 			//show the next page/element
 			document.getElementById("message").innerHTML = stats.content;
 			finale.style.display = "block";
 
-		},000);
+		},1000);
 	}
 };
 

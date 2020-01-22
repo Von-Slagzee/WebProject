@@ -23,6 +23,10 @@ var server = http.createServer(app).listen(port);
 
 var waiting = [];
 var playing = [];
+
+var played = 0;
+var idle = 0;
+
 var ids = 0;
 
 app.use(express.static(__dirname + "/public/splashscreen"));
@@ -50,21 +54,30 @@ wss.on("connection", function(ws, require)
 {
 	var id = ids;
 	ids++;
+
+	var forstats = false;
+
 	ws.on('close', function close() {
+		if(forstats && idle > 0)
+			idle--;	
 		var status = {
 			status: "finale",
 			content: "Sorry, opponent disconnected."
 		};
-		for(var i = 0; i < playing.length; i++)
+		for(var i = 0; i < waiting.length; i++)
 		{
-			if(playing[i].red.id == id)
+			if(waiting[i].id == id)
 			{
-				playing[i].blue.ws.send(JSON.stringify(status));
+				waiting.splice(i,1);
 				break;
 			}
-			else if(playing[i].blue.id == id)
+		}
+
+		for(var i = 0; i < playing.length; i++)
+		{
+			if(playing[i].red.id == id || playing[i].blue.id == id)
 			{
-				playing[i].red.ws.send(JSON.stringify(status));
+				playing.splice(i,1);
 				break;
 			}
 		}
@@ -79,15 +92,19 @@ wss.on("connection", function(ws, require)
 			message = JSON.parse(message);
 			if(message.status == "stats")
 			{
+				idle++;
+				forstats = true;
 				update = function()
 				{
-					var x = [];
-					x[0] = "stats";
-					for(var i = 1; i < 4; i++)
+					var x =
 					{
-						x[i] = Math.floor(Math.random()*10)+1;
-					}
-	
+						status: "stats",
+						1: waiting.length + playing.length*2 + idle,//online
+						2: played - playing.length*2,				//played
+						3: playing.length*2							//playing
+					};
+
+
 					ws.send(JSON.stringify(x));
 					if(ws.readyState < 3)	
 						setTimeout(update, 15000);
@@ -106,6 +123,7 @@ wss.on("connection", function(ws, require)
 				//check if two people are connected
 				if(waiting.length >= 2)
 				{
+					played += 2;
 					playing.push({
 						red: waiting.pop(),
 						blue: waiting.pop(),
@@ -181,12 +199,12 @@ wss.on("connection", function(ws, require)
 				if(id % 2 == 0)
 				{
 					sendto = playing[playing_index].red.ws;		
-					playing[playing_index].matrix[message.column].push("blue");	
+					playing[playing_index].matrix[message.column].push("Blue");	
 				}
 				else
 				{
 					sendto = playing[playing_index].blue.ws;		
-					playing[playing_index].matrix[message.column].push("red");					
+					playing[playing_index].matrix[message.column].push("Red");					
 				}
 
 				sendto.send(JSON.stringify({
@@ -217,11 +235,11 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 	if(id % 2 == 0)	
 	{
 		//is blue
-		col = "blue";
+		col = "Blue";
 	}
 	else
 	{
-		col = "red";
+		col = "Red";
 
 	}
 	
@@ -280,7 +298,6 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 						if(matrix[a].length>=b&&matrix[a][b]== col)
 						{
 							counter++;
-							console.log(counter);
 							if(counter>=4)
 							{
 								status = {
@@ -311,58 +328,17 @@ function checkgamestats(playing_index, lastmover, opponent, message, id)
 
 					}
 				}
-			}	
-					
-					var mindi =
-					{
-						x: 0,
-						y: 0
-					};
-					j-=1;
-					if(j + ii > 5)
-					{
-						mindi.y = 5;
-						mindi.x = j + ii - 5;
-					}
-					else
-					{
-						mindi.x = 0;
-						mindi.y = ii+j;
-					}
-					var l = mindi.y;
-					console.log({
-						i: ii,
-						j: j,
-						x: mindi.x,
-						y: mindi.y,
-						matrix: matrix
-					});
-					for(var k = mindi.x; k < 7 && l < 6; k++)
-					{
-						if(matrix[k][l] == col)
-						{
-							counter++;
-						}
-						else
-						{
-							if(counter < 4)
-							{
-								counter = 0;
-							}
-						}
-						l++;				
-					}
-					
-				if(status == undefined)
-				{
-					return false;
-				}
-				else
-				{
-					lastmover.send(JSON.stringify(status));
-					opponent.send(JSON.stringify(status));	
-					return false;
-				}
+			}			
+			if(status == undefined)
+			{
+				return false;
+			}
+			else
+			{
+				lastmover.send(JSON.stringify(status));
+				opponent.send(JSON.stringify(status));	
+				return false;
+			}
    	 	} 
 	}
 	//is a draw

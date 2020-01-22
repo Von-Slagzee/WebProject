@@ -42,7 +42,7 @@ socket.onmessage = function(event)
 	console.log(event.data);
 	var stats = JSON.parse(event.data);	
 
-	if(stats[0] == "stats")
+	if(stats.status == "stats")
 	{
 		var statslist = document.getElementById("stats").children;
 		for(var i = 1; i <= statslist.length; i++)
