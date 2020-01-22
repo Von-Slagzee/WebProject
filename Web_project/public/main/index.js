@@ -2,6 +2,8 @@ let blobs = [];
 let current_index;
 let width;
 let height;
+let wobble = false;
+
 
 let matrix = [];
 
@@ -72,6 +74,11 @@ function draw()
 	{
 	}
 	
+	if(wobble)
+	{
+		blobs[current_index].x += Math.random()*6-3
+		blobs[current_index].y += Math.random()*6-3
+	}
 	for(var i = 0; i < blobs.length; i++)
 	{
 		blobs[i].show();
@@ -85,13 +92,7 @@ function draw()
 				{
 					if(Math.abs(blobs[i].y - blobs[j].y) <= blobs[i].size + blobs[j].size && blobs[i].stop != true)
 					{
-						console.log("here");
-					
-						//setTimeout(function()
-					//	{
-							new Audio("click.wav").play();
-				//		});
-						
+						new Audio("click.wav").play();	
 						blobs[i].stop = true;
 					}
 				}
@@ -148,7 +149,27 @@ function mouseClicked()
 
 
 		}
+		else
+		{
+			wobble = true;
+			setTimeout(function()
+			{
+				wobble = false;
+				blobs[current_index].y = 145;
+			},200);
 
+		}
+
+	}
+	else
+	{
+		a
+		wobble = true;
+		setTimeout(function()
+		{
+			wobble = false;
+			blobs[current_index].y = 145;
+		},200);
 	}
 	
 }

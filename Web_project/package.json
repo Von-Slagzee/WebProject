@@ -1,0 +1,26 @@
+{
+  "name": "web_project",
+  "version": "1.0.0",
+  "description": "COnnect 4",
+  "main": "tcp.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ws": "^7.2.1",
+    "websocket": "^1.0.31"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "node tcp.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Von-Slagzee/WebProject.git"
+  },
+  "author": "Ali & Ilinca",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Von-Slagzee/WebProject/issues"
+  },
+  "homepage": "https://github.com/Von-Slagzee/WebProject#readme"
+}
