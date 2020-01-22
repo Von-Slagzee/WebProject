@@ -163,7 +163,6 @@ function mouseClicked()
 	}
 	else
 	{
-		a
 		wobble = true;
 		setTimeout(function()
 		{

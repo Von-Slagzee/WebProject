@@ -49,6 +49,13 @@ img {
 	left: 25; 
 	top:10;
 }
+.menu-right
+{
+	position:absolute; 
+	right: 25; 
+	top:10;
+}
+
 .submenu
 {
 	display:inline-block;

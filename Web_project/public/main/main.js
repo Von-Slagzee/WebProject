@@ -140,6 +140,16 @@ function sendmsg(msg)
 	}));	
 }
 
+function fullscreen()
+{
+	var element = document.documentElement;
+    var isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || false;
+
+	element.requestFullScreen = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || function () { return false; };
+	document.cancelFullScreen = document.cancelFullScreen || document.webkitCancelFullScreen || document.mozCancelFullScreen || function () { return false; };
+
+	isFullscreen ? document.cancelFullScreen() : element.requestFullScreen();
+}
 
 
 //do these once the game runs
