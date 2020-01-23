@@ -92,7 +92,7 @@ function draw()
 				{
 					if(Math.abs(blobs[i].y - blobs[j].y) <= blobs[i].size + blobs[j].size && blobs[i].stop != true)
 					{
-						new Audio("click.wav").play();	
+						new Audio("resources/click.wav").play();	
 						blobs[i].stop = true;
 					}
 				}
@@ -110,15 +110,17 @@ function draw()
 	}catch{}
 
 	var img = new Image();
-	img.src = "image.png";
+	img.src = "resources/image.png";
 	ctx.drawImage(img,boardX, boardY, 700, 600);	
 }
 
 //temporary thing; to prevent annoying accidental clicks
+var lastclicked=-1;
 function mouseClicked()
 {
-	if(turn)
+	if(turn && lastclicked!=sec+60*min)
 	{
+		lastclicked = sec+60*min;
 		//check if blob is in decent place
 		if(checkblob())
 		{

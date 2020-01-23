@@ -1,0 +1,135 @@
+1.1|
+
+telnet www.surfweer.nl 80   
+
+HEAD / HTTP/1.1
+Host: surfweer.nl
+
+HTTP/1.1 200 OK
+Date: Mon, 13 Jan 2020 13:28:02 GMT
+Content-Type: text/html; charset=UTF-8
+Connection: keep-alive
+Set-Cookie: __cfduid=dec75448d2d0d80605375bbc4237334901578922081; expires=Wed, 12-Feb-20 13:28:01 GMT; path=/; domain=.surfweer.nl; HttpOnly; SameSite=Lax
+X-Powered-By: PHP/5.6.7
+Link: <http://surfweer.nl/wp-json/>; rel="https://api.w.org/"
+Vary: User-Agent
+CF-Cache-Status: DYNAMIC
+Server: cloudflare
+CF-RAY: 5547b5ff3ce8bf5a-AMS
+
+
+HEAD /surf/webcams/ HTTP/1.1
+Host: surfweer.nl
+
+HTTP/1.1 200 OK
+Date: Mon, 13 Jan 2020 13:24:53 GMT
+Content-Type: text/html; charset=UTF-8
+Connection: keep-alive
+Set-Cookie: __cfduid=dfea706bdfcdeca7a71fcef7381f2f76b1578921893; expires=Wed, 12-Feb-20 13:24:53 GMT; path=/; domain=.surfweer.nl; HttpOnly; SameSite=Lax
+X-Powered-By: PHP/5.6.7
+Set-Cookie: PHPSESSID=qvpovfrm6lcr3ipcutfb8prlh4; path=/
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Link: <http://surfweer.nl/surf/wp-json/>; rel="https://api.w.org/"
+Link: <http://surfweer.nl/surf/?p=6631>; rel=shortlink
+Vary: User-Agent
+CF-Cache-Status: DYNAMIC
+Server: cloudflare
+CF-RAY: 5547b162ddffd90d-AMS
+
+
+GET /surf/webcams/ HTTP/1.1
+Host: surfweer.nl
+
+(OUTPUT IN INDEX.HTML)
+
+1.2|
+The webpage matches the output html(in a seperate document (index.html))
+
+1.3|
+(neither of the tags mentioned in the question are recieved in the head/get requests; Nonetheless, looked up the definition)
+
+The Transfer-Encoding header specifies the form of encoding used to safely transfer the payload body to the user.
+source: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
+
+1.4|
+The Cache-Control HTTP header holds directives (instructions) for caching in both requests and responses. A given directive in a request does not mean the same directive should be in the response.
+no-cache
+Caches must check with the origin server for validation before using the cached copy.
+no-store
+The cache should not store anything about the client request or server response.
+must-revalidate
+Indicates that once a resource becomes stale, caches must not use their stale copy without successful validation on the origin server.
+source:https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+
+2.1|
+If the content-length is less than what it actually is, it clips the string at its end; If its more than what the string specified is, it adds \r followed by a \n (and repeating) after the string(data). For example if the data given is "hi" and the content-length is 5 the data sent would be "hi\r\n\r".
+
+3.1|
+It does not require re-authentincation on refresh but does require it if the session is restarted or in a new private session. The reason behind this can be seen in the header information (Connection	keep-alive) which sets up a TCP connection with the server for the whole session, making it not require any reauthentication.
+
+3.2|
+HEAD /basic-auth/user/passwd HTTP/1.1
+host:httpbin.org
+
+HTTP/1.1 401 UNAUTHORIZED
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Origin: *
+Content-Length: 0
+Date: Mon, 13 Jan 2020 14:16:13 GMT
+Referrer-Policy: no-referrer-when-downgrade
+Server: nginx
+WWW-Authenticate: Basic realm="Fake Realm"
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+HEAD /basic-auth/user/passwd HTTP/1.1
+host:httpbin.org
+Authorization: Basic dXNlcjpwYXNzd2Q=a
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Origin: *
+Content-Encoding: gzip
+Content-Type: application/json
+Date: Mon, 13 Jan 2020 14:22:37 GMT
+Referrer-Policy: no-referrer-when-downgrade
+Server: nginx
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+if telnet is closed (the tcp connection is closed) the server would requires reauthentication. I fhte connection is still there, and a head request is sent without the authorisation bit it returns a 401 bad request which does not mimic the refresh in browser.
+
+4.1|
+Connect Four
+
+4.2|
+//labels:
+First Game: https://poki.com/en/g/connect-4
+Second Game: https://c4arena.com/
+Third Game: https://papergames.io/en/connect4
+
+Design aspect 1: "Don't make me think"
+All 3 games are intuitive enough to be navigated by anyone.
+Design aspect 2:minimize noise and clutter
+The second game is the most minimalistic, followed by the third one which is ok too. The first one has too much hassle around the screen(links to other games).
+Design aspect 3:If you cannot make it self-evident, make it self-explanatory
+All of the game designs are self explanatory. The third one has buttons with symbols and text describing their function.
+*Note*: screenshots are included in file
+
+4.3|
+Pros:
+- The last two games allow for the user to generate a link that allows them to play with their friends
+- The second games allows the user to choose a difficulty of the AI against them 
+- THe second game has both a facebook version and a chrome extension which are handy features for portability
+
+Cons:
+- All three games do not seem to explain how the game works, and assumethat the user is already familiar with it.
+- The third game is at many times unresponsive (especially when establishing connections) and at times redirect to non-existent pages
+- The sound in the first one does not work (at least not for us)
+

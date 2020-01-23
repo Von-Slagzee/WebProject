@@ -44,7 +44,6 @@ app.get("/", function(req, res, next)
 	if(req.cookies["visits"])
 	{
 		visits = parseInt(req.cookies["visits"]); 
-		console.log(visits);
 		visits++;
 	}
 	else
@@ -59,33 +58,17 @@ app.get("/", function(req, res, next)
 
 app.get("/", function(req, res)
 {
-	var x = "hi";
-
 	res.render("splash.ejs", {
-		visits: visits,//online
-		played: played - playing.length*2,				//played
-		playing: playing.length*2							//playing
+		visits: visits,
+		played: played - playing.length*2,				
+		playing: playing.length*2					
 	})
 
 });
 
-app.get("/splashscreen", function(req, res)
-{
-	console.log("sending");
-	res.cookie("addadshellassdssdao");
-	res.sendFile(__dirname + "/public/splashscreen/");	
-});
-
-app.get("/send", function(req, res)
-{
-	console.log("sending");
-	res.cookie("hello");
-	res.send();
-
-});
 app.get("/play", function(req, res)
 {
-	res.sendFile(__dirname + "/public/main/main.html");
+	res.sendFile(__dirname + "/public/main.html");
 });
 
 app.get("/*", function(req, res)
@@ -149,31 +132,7 @@ wss.on("connection", function(ws, require)
 		try
 		{
 			message = JSON.parse(message);
-			if(message.status == "stats")
-			{
-				console.log("idle");
-				idle++;
-				forstats = true;
-				update = function()
-				{
-					var x =
-					{
-						status: "stats",
-						1: waiting.length + playing.length*2 + idle,//online
-						2: played - playing.length*2,				//played
-						3: playing.length*2							//playing
-					};
-
-
-					ws.send(JSON.stringify(x));
-					if(ws.readyState < 3)	
-						setTimeout(update, 15000);
-				}
-	
-				update();	
-	
-			}
-			else if(message.status == "play")
+			if(message.status == "play")
 			{
 				//allow client to enter session
 				waiting.push({

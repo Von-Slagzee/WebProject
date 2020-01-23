@@ -1,7 +1,7 @@
 var MouseX;
 var MouseY;
 var mouseDown;
-var turn;
+var turn = false;
 
 var game = document.getElementById("main");
 game.style.display = "none";
@@ -52,13 +52,16 @@ socket.onmessage = function(event)
 	{
 		MouseX = stats.content;
 	}
-	else if(stats.status == "finale")
+	else if(stats.status == "finale" && finale.style.display == "none")
 	{
 		turn = false;
 		setTimeout(function() {
-			//game.style.display = "none";
-			//show the next page/element
 			document.getElementById("message").innerHTML = stats.content;
+			if(stats.content.includes("disconnected"))
+			{
+				console.log("here");
+				document.getElementById("play").style.marginTop = "20px";
+			}
 			document.getElementById("container").style.animation = "finale";
   			document.getElementById("container").style.animationDuration = "0.7s";
 			finale.style.display = "block";

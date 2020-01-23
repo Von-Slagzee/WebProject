@@ -1,0 +1,3 @@
+-hover over one column: create a disk over that column
+-click on one column: if the columnis not full, drops the disk
+-hover on buttons: makes them expand

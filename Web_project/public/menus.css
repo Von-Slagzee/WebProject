@@ -98,7 +98,7 @@ img {
 	text-align: center;
 }
 
-.play
+#play
 {
 	cursor:pointer;
 	font-family: "arial";
@@ -118,12 +118,12 @@ img {
 	padding: 16px 100px 16px 100px;
 
 }
-.play:active
+#play:active
 {
 	background: coral !important;
 }
 
-.play:hover
+#play:hover
 {
 	padding: 20px 115px 20px 115px;
 
