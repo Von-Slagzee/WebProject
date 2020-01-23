@@ -149,7 +149,6 @@ function mouseClicked()
 			blobs[current_index].column = temp_col;
 			blobs[current_index].row = matrix[temp_col].length;
 
-
 		}
 		else
 		{

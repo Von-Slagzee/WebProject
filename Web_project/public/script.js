@@ -28,31 +28,4 @@ window.onload = function()
 }
 
 
-var socket = new WebSocket("ws://localhost:3000");
-
-socket.onopen = function()
-{
-	//request stats feed
-	socket.send(JSON.stringify({
-		status: "stats"
-	}));
-}
-socket.onmessage = function(event)
-{
-//	console.log(event.data);
-//	var stats = JSON.parse(event.data);	
-//
-//	if(stats.status == "stats")
-//	{
-//		//var statslist = document.getElementById("stats").children;
-////		for(var i = 1; i <= statslist.length; i++)
-////		{
-////			statslist[i-1].firstChild.innerHTML = stats[i];
-////		}
-//	}
-//	else
-//	{
-//		console.log(event.data);
-//	}
-};
 
