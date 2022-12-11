@@ -7,7 +7,7 @@
     "cookie-parse": "^0.4.0",
     "cookie-parser": "^1.4.4",
     "ejs": "^3.0.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "websocket": "^1.0.31",
     "ws": "^7.2.1"
   },
